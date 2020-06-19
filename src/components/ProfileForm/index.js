@@ -9,6 +9,7 @@ import {
 import { UserContext } from '../../contexts/UserProvider';
 import { auth, generateUserDocument } from '../../services/firebaseConfig';
 import ProfileInfo from '../ProfileInfo';
+import { getBase64 } from '../../utils';
 
 function ProfileForm() {
   const { user, dispatch: userDispatch } = useContext(UserContext);
@@ -68,11 +69,12 @@ function ProfileForm() {
 
   const handleChangePhoto = ({ target: { files } }) => {
     const file = files[0];
-    let data = new FormData();
-    data.append('data', file);
-    console.log(data);
-    // setUserInfo({ ...userInfo, photoURL });
-    // setIsUpdatePhoto(true);
+    getBase64(file, onLoad);
+  };
+
+  const onLoad = (photoURL) => {
+    setUserInfo({ ...userInfo, photoURL });
+    setIsUpdatePhoto(true);
   };
 
   const handleRemovePhoto = () => {
